@@ -1,0 +1,18 @@
+source /usr/share/antigen.zsh
+
+antigen use oh-my-zsh # ugh
+
+antigen bundle git
+antigen bundle command-not-found
+antigen bundle zsh-users/zsh-syntax-highlighting
+
+# theme from oh-my-zsh
+antigen bundle ys
+antigen theme ys
+
+antigen apply
+
+# Paths
+export GOPATH="$HOME/gocode"
+export PATH="$PATH:$HOME/.npm-packages/bin:$HOME/gocode/bin"
+export VISUAL=nvim
