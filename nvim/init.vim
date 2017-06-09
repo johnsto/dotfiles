@@ -4,6 +4,8 @@ set number
 set hlsearch
 set showmatch
 set smartindent
+set tabstop=4
+set shiftwidth=4
 
 " Load plugins
 call plug#begin()
@@ -37,7 +39,6 @@ endif
 syntax on
 
 " Filetype specific tweaks
-autocmd FileType go setlocal tabstop=4 shiftwidth=4
 
 " Force 256 colour theme.
 set t_Co=256
