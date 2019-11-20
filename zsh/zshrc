@@ -1,4 +1,4 @@
-source /usr/share/antigen.zsh
+source /usr/share/zsh-antigen/antigen.zsh
 
 antigen use oh-my-zsh # ugh
 
@@ -14,5 +14,25 @@ antigen apply
 
 # Paths
 export GOPATH="$HOME/gocode"
-export PATH="$PATH:$HOME/.npm-packages/bin:$HOME/gocode/bin"
+export PATH="$PATH:$HOME/.npm-packages/bin:$HOME/gocode/bin:$HOME/bin"
+export PATH="$PATH:$HOME/.dotnet/tools"
 export VISUAL=nvim
+
+# Vim mode
+bindkey -v
+export KEYTIMEOUT=1
+bindkey '^w' backward-kill-word
+bindkey '^r' history-incremental-search-backward
+
+# Start direnv
+eval "$(direnv hook zsh)"
+
+# Start pyenv
+export PATH="/home/dave/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+# Inject kubectl completions
+source <(kubectl completion zsh)
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
