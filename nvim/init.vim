@@ -4,6 +4,7 @@ call plug#begin()
 Plug 'sheerun/vim-polyglot'
 Plug 'neovim/nvim-lspconfig'
 Plug 'mfussenegger/nvim-lint'
+Plug 'dense-analysis/ale'
 
 " Completion
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -13,6 +14,7 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
+Plug 'rafamadriz/friendly-snippets'
 
 " File finders
 Plug 'nvim-lua/plenary.nvim'
@@ -24,6 +26,7 @@ Plug 'scrooloose/nerdtree'
 " Appearance
 Plug 'mhartington/oceanic-next'
 Plug 'itchyny/lightline.vim'
+Plug 'maximbaz/lightline-ale'
 Plug 'ntpeters/vim-better-whitespace'
 " Tags
 Plug 'majutsushi/tagbar'
@@ -121,12 +124,34 @@ set noshowmode " Don't show INSERT mode in command window
 let g:lightline = {
 	\ 'tabline_separator': {'left': "", 'right': ""},
 	\ 'tabline_subseparator': {'left': "", 'right': ""},
-	\ 'active': {'left': [ ['mode', 'paste'], ['readonly', 'filename', 'modified', 'method'] ] },
+	\ 'active': {                                                                                               
+        	\ 'left': [ ['mode', 'paste'], ['readonly', 'filename', 'modified', 'method'] ],                    
+        	\ 'right': [ [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
+		\            [ 'lineinfo' ],                                                                           
+        	\            [ 'percent' ],                                                                         
+        	\            [ 'fileformat', 'fileencoding', 'filetype'] ]                                          
+	\ },                                                                                                        
 	\ 'component_function': {'filename': 'LightlineFilename', 'method': 'NearestMethodOrFunction'},
     \ }
 function! LightlineFilename()
   return expand('%:p')
 endfunction
+
+let g:lightline.component_expand = {
+      \  'linter_checking': 'lightline#ale#checking',
+      \  'linter_infos': 'lightline#ale#infos',
+      \  'linter_warnings': 'lightline#ale#warnings',
+      \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_ok': 'lightline#ale#ok',
+      \ }
+let g:lightline.component_type = {
+      \     'linter_checking': 'right',
+      \     'linter_infos': 'right',
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'right',
+      \ }
+
 
 """ COC options
 set hidden
@@ -157,7 +182,7 @@ lua <<EOF
         i = cmp.mapping.abort(),
         c = cmp.mapping.close(),
       }),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      ['<CR>'] = cmp.mapping.confirm({ select = false }),
     },
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
@@ -202,9 +227,7 @@ let g:go_fmt_fail_silently = 1
 let g:go_highlight_build_constraints = 1
 let g:go_metalinter_autosave = 0
 let g:go_jump_to_error = 0
-let g:go_rename_command = 'gopls'
-let g:go_fmt_command = 'gopls'
-let g:go_metalinter_command = "golangci-lint"
+let g:go_gopls_gofumpt = 1
 
 autocmd FileType go nmap <leader>gt <Plug>(go-test)
 autocmd FileType go nmap <leader>gT <Plug>(go-test-func)
